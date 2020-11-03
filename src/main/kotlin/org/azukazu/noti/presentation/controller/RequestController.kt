@@ -2,7 +2,7 @@ package org.azukazu.noti.presentation.controller
 
 import org.azukazu.noti.application.NotificationApplicationService
 import org.azukazu.noti.domain.model.youtube.ChannelId
-import org.azukazu.noti.domain.model.youtube.LineUserId
+import org.azukazu.noti.domain.model.line.LineUserId
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping

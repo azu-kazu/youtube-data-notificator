@@ -1,7 +1,7 @@
 package org.azukazu.noti.application
 
 import org.azukazu.noti.domain.model.youtube.ChannelId
-import org.azukazu.noti.domain.model.youtube.LineUserId
+import org.azukazu.noti.domain.model.line.LineUserId
 import org.azukazu.noti.infrastructure.transmission.line.LineNotificator
 import org.azukazu.noti.infrastructure.transmission.youtube.YoutubeClient
 import org.slf4j.LoggerFactory

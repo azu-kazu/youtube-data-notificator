@@ -4,7 +4,7 @@ import com.linecorp.bot.client.LineMessagingClient
 import com.linecorp.bot.model.PushMessage
 import com.linecorp.bot.model.message.TextMessage
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler
-import org.azukazu.noti.domain.model.youtube.LineUserId
+import org.azukazu.noti.domain.model.line.LineUserId
 import org.azukazu.noti.domain.model.youtube.VideoInfo
 import org.springframework.stereotype.Component
 
