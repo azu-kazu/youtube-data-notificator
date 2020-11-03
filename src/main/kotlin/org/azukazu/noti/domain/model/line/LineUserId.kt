@@ -1,4 +1,4 @@
-package org.azukazu.noti.domain.model.youtube
+package org.azukazu.noti.domain.model.line
 
 /**
  * LINEユーザID
