@@ -1,5 +1,9 @@
-package org.azukazu.noti.infrastructure.transmission.youtube.dto
+package org.azukazu.noti.infrastructure.transmission.youtube.youtube_data_api.dto
 
+/**
+ * 動画情報DTO
+ * Youtube Data API（Playlists）
+ */
 data class PlaylistItemsApiDto(
     val items: List<ItemsDtoForPlaylistItems>
 )

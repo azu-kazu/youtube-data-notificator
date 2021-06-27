@@ -3,7 +3,7 @@ package org.azukazu.noti.domain.model.youtube
 /**
  * 再生リスト情報
  */
-class PlaylistInfo(
+class Playlist(
 
     /** 再生リストID */
     val id: PlaylistId,

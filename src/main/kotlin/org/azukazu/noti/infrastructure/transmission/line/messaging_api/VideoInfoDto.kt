@@ -1,11 +1,12 @@
-package org.azukazu.noti.infrastructure.transmission.line
+package org.azukazu.noti.infrastructure.transmission.line.messaging_api
 
-import org.azukazu.noti.domain.model.youtube.VideoInfo
+import org.azukazu.noti.domain.model.youtube.Video
 
 /**
- * 動画情報DTO(LINE通知用)
+ * 動画情報DTO
+ * Youtube Data API（Videos）
  */
-data class VideoInfoDto (
+data class VideoInfoDto(
     /** タイトル */
     val title: String,
     /** 視聴回数 */
@@ -16,7 +17,7 @@ data class VideoInfoDto (
     val dislikeCount: Long,
     /** コメント数 */
     val commentCount: Long
-){
+) {
 
     /**
      * 文章の生成
@@ -32,13 +33,13 @@ data class VideoInfoDto (
 
     companion object {
 
-        fun from(videoInfo: VideoInfo): VideoInfoDto =
+        fun from(video: Video): VideoInfoDto =
             VideoInfoDto(
-                videoInfo.title,
-                videoInfo.viewCount,
-                videoInfo.likeCount,
-                videoInfo.dislikeCount,
-                videoInfo.commentCount
+                video.title,
+                video.viewCount,
+                video.likeCount,
+                video.dislikeCount,
+                video.commentCount
             )
     }
 }

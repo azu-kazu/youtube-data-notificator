@@ -1,4 +1,4 @@
-package org.azukazu.noti.infrastructure.transmission.youtube.dto
+package org.azukazu.noti.infrastructure.transmission.youtube.youtube_data_api
 
 data class VideosApiDto(
     val items: List<ItemsDtoForVideos>
