@@ -1,13 +1,9 @@
-package org.azukazu.noti.infrastructure.transmission.youtube
+package org.azukazu.noti.infrastructure.transmission.youtube.youtube_data_api
 
-import org.azukazu.noti.domain.model.youtube.ChannelId
-import org.azukazu.noti.domain.model.youtube.PlaylistInfo
-import org.azukazu.noti.domain.model.youtube.PlaylistId
-import org.azukazu.noti.domain.model.youtube.VideoInfo
-import org.azukazu.noti.domain.model.youtube.VideoId
-import org.azukazu.noti.infrastructure.transmission.youtube.dto.ChannelsApiDto
-import org.azukazu.noti.infrastructure.transmission.youtube.dto.PlaylistItemsApiDto
-import org.azukazu.noti.infrastructure.transmission.youtube.dto.VideosApiDto
+import org.azukazu.noti.application.YoutubeClient
+import org.azukazu.noti.domain.model.youtube.*
+import org.azukazu.noti.infrastructure.transmission.youtube.youtube_data_api.dto.ChannelsApiDto
+import org.azukazu.noti.infrastructure.transmission.youtube.youtube_data_api.dto.PlaylistItemsApiDto
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
@@ -16,25 +12,24 @@ import org.springframework.web.client.RestTemplate
  * Youtube Data API を使用するクライアント
  */
 @Component
-class YoutubeClient(
+class YoutubeDataApiClient(
     private val restTemplate: RestTemplate,
     @Value("\${youtube.api.accesstoken}")
     private val accessToken: String
-) {
+) : YoutubeClient {
 
     companion object {
-        private const val CHANNELS_API_URL = "https://www.googleapis.com/youtube/v3/channels?part=contentDetails&fields=items(contentDetails(relatedPlaylists(uploads)))"
-        private const val PLAYLIST_ITEMS_API_URL = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&fields=items(snippet(resourceId(videoId)))"
-        private const val VIDEOS_API_URL = "https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&fields=items(snippet(title),statistics)"
+        private const val CHANNELS_API_URL = "https://www.googleapis.com/youtube/v3/channels"
+        private const val PLAYLIST_ITEMS_API_URL = "https://www.googleapis.com/youtube/v3/playlistItems"
+        private const val VIDEOS_API_URL = "https://www.googleapis.com/youtube/v3/videos"
     }
 
-    /**
-     * 投稿動画に関する再生リストのIDを取得
-     */
-    fun fetchPlayListIdRelatedToUploadedVideo(channelId: ChannelId): PlaylistId {
+    override fun fetchPlayListIdRelatedToUploadedVideo(channelId: ChannelId): PlaylistId {
 
         val uri = buildString {
             append(CHANNELS_API_URL)
+            append("?part=contentDetails")
+            append("&fields=items(contentDetails(relatedPlaylists(uploads)))") // 投稿動画の再生リストを指定
             append("&key=$accessToken")
             append("&id=${channelId.value}")
         }
@@ -48,13 +43,12 @@ class YoutubeClient(
         return PlaylistId(channelsApiDto.items[0].contentDetails.relatedPlaylists.uploads)
     }
 
-    /**
-     * 再生リスト情報を取得
-     */
-    fun fetchPlaylistInfo(playlistId: PlaylistId): PlaylistInfo {
+    override fun fetchPlaylist(playlistId: PlaylistId): Playlist {
 
         val uri = buildString {
             append(PLAYLIST_ITEMS_API_URL)
+            append("?part=snippet")
+            append("&fields=items(snippet(resourceId(videoId)))")
             append("&key=$accessToken")
             append("&playlistId=${playlistId.value}")
         }
@@ -68,19 +62,18 @@ class YoutubeClient(
         val videoIds = playlistItemsApiDto.items
             .map { item -> VideoId(item.snippet.resourceId.videoId) }
 
-        return PlaylistInfo(
+        return Playlist(
             playlistId,
             videoIds
         )
     }
 
-    /**
-     * 動画情報を取得
-     */
-    fun fetchVideoInfo(videoId: VideoId): VideoInfo {
+    override fun fetchVideo(videoId: VideoId): Video {
 
         val uri = buildString {
             append(VIDEOS_API_URL)
+            append("?part=snippet,statistics")
+            append("&fields=items(snippet(title),statistics)")
             append("&key=$accessToken")
             append("&id=${videoId.value}")
         }
@@ -91,7 +84,7 @@ class YoutubeClient(
                 VideosApiDto::class.java)
                 ?: throw IllegalArgumentException("指定した動画は存在しません. 動画ID = ${videoId.value}")
 
-        return VideoInfo(
+        return Video(
             videoId,
             videosApiDtos.items[0].snippet.title,
             videosApiDtos.items[0].statistics.viewCount,

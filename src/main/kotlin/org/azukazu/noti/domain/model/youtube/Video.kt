@@ -3,7 +3,7 @@ package org.azukazu.noti.domain.model.youtube
 /**
  * 動画情報
  */
-class VideoInfo (
+class Video (
 
     /** 動画ID */
     val id: VideoId,
